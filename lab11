@@ -1,0 +1,50 @@
+import csv
+
+
+def read_csv_file(file_path):
+    try:
+        with open(file_path, 'r', newline='') as file:
+            reader = csv.reader(file)
+            data = [row for row in reader]
+        return data
+    except FileNotFoundError:
+        print(f"Error: File '{file_path}' not found.")
+        return None
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+
+def display_csv_content(data):
+    if data:
+        for row in data:
+            print(row)
+
+
+def search_and_save_results(data, search_terms, output_file_path):
+    if data:
+        matching_rows = [row for row in data if any(term.lower() in row[0].lower() for term in search_terms)]
+
+        if matching_rows:
+            with open(output_file_path, 'w', newline='') as output_file:
+                writer = csv.writer(output_file)
+                writer.writerows(matching_rows)
+            print(f"Results saved to '{output_file_path}'.")
+        else:
+            print("No matching rows found.")
+
+
+if __name__ == "__main__":
+    input_file_path = "C:/Ы/Оставь надежду, всяк сюда входящий/Унивир/2 курс/Python/aef0b4d0-fee5-4c82-bdca-05c268e3ff94_Data.csv"
+    output_file_path = "C:/Ы/Оставь надежду, всяк сюда входящий/Унивир/2 курс/Python/output.csv"
+
+    # Читання вмісту CSV файлу
+    csv_data = read_csv_file(input_file_path)
+
+    # Виведення вмісту CSV файлу на екран
+    print("CSV File Content:")
+    display_csv_content(csv_data)
+
+    # Пошук та збереження результатів
+    search_terms = input("Enter country names (comma-separated) to search: ").split(',')
+    search_and_save_results(csv_data, search_terms, output_file_path)
